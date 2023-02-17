@@ -1,4 +1,3 @@
-# loan-assistant
-
-pip install auto-py-to-exe
-auto-py-to-exe
+Запуск проекта
+* Клонируем проект
+* Заходим в папку output и запускаем main.exe

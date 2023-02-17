@@ -33,7 +33,7 @@ class Ui_MainWindow(object):
 		self.frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
 		self.frame.setObjectName("frame")
 		self.label = QtWidgets.QLabel(self.frame)
-		self.label.setGeometry(QtCore.QRect(190, 20, 341, 31))
+		self.label.setGeometry(QtCore.QRect(190, 20, 360, 31))
 		font = QtGui.QFont()
 		font.setFamily("Arial")
 		font.setPointSize(20)
@@ -262,7 +262,7 @@ class Ui_MainWindow(object):
 		self.frame_7.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
 		self.frame_7.setObjectName("frame_7")
 		self.mortgage_sum = QtWidgets.QLineEdit(self.frame_7)
-		self.mortgage_sum.setGeometry(QtCore.QRect(50, 30, 261, 41))
+		self.mortgage_sum.setGeometry(QtCore.QRect(50, 30, 250, 41))
 		font = QtGui.QFont()
 		font.setPointSize(-1)
 		self.mortgage_sum.setFont(font)
@@ -275,7 +275,7 @@ class Ui_MainWindow(object):
 		self.mortgage_sum.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
 		self.mortgage_sum.setObjectName("mortgage_sum")
 		self.mortgage_year = QtWidgets.QLineEdit(self.frame_7)
-		self.mortgage_year.setGeometry(QtCore.QRect(50, 100, 261, 41))
+		self.mortgage_year.setGeometry(QtCore.QRect(50, 100, 250, 41))
 		font = QtGui.QFont()
 		font.setPointSize(-1)
 		self.mortgage_year.setFont(font)
@@ -309,12 +309,12 @@ class Ui_MainWindow(object):
 "font-size: 16px;")
 		self.label_12.setObjectName("label_12")
 		self.label_13 = QtWidgets.QLabel(self.frame_8)
-		self.label_13.setGeometry(QtCore.QRect(180, 100, 111, 21))
+		self.label_13.setGeometry(QtCore.QRect(170, 100, 130, 21))
 		self.label_13.setStyleSheet("border:none;\n"
 "font-size: 16px;")
 		self.label_13.setObjectName("label_13")
 		self.btn_mortgage = QtWidgets.QPushButton(self.frame_8)
-		self.btn_mortgage.setGeometry(QtCore.QRect(40, 140, 231, 31))
+		self.btn_mortgage.setGeometry(QtCore.QRect(25, 140, 250, 31))
 		self.btn_mortgage.setStyleSheet("border: 1px solid transparent;\n"
 "background-color: rgb(3, 155, 229);\n"
 "border-radius: 8px;\n"
@@ -334,7 +334,7 @@ class Ui_MainWindow(object):
 "font-size: 16px;")
 		self.mortgage_sumKredita.setObjectName("mortgage_sumKredita")
 		self.mortgage_vznos = QtWidgets.QLineEdit(self.frame_7)
-		self.mortgage_vznos.setGeometry(QtCore.QRect(50, 170, 261, 41))
+		self.mortgage_vznos.setGeometry(QtCore.QRect(50, 170, 250, 41))
 		font = QtGui.QFont()
 		font.setPointSize(-1)
 		self.mortgage_vznos.setFont(font)
@@ -413,7 +413,7 @@ class Ui_MainWindow(object):
 	def retranslateUi(self, MainWindow):
 		_translate = QtCore.QCoreApplication.translate
 		MainWindow.setWindowTitle(_translate("MainWindow", "Помощник по кредитованию"))
-		self.label.setText(_translate("MainWindow", "Помощник по крдитованию"))
+		self.label.setText(_translate("MainWindow", "Помощник по кредитованию"))
 		self.credit_sum.setPlaceholderText(_translate("MainWindow", "Сумма в рублях"))
 		self.credit_year.setPlaceholderText(_translate("MainWindow", "Cрок в годах"))
 		self.label_2.setText(_translate("MainWindow", "Ставка:"))
@@ -440,7 +440,7 @@ class Ui_MainWindow(object):
 		self.label_13.setText(_translate("MainWindow", "0 ₽"))
 		self.btn_mortgage.setText(_translate("MainWindow", "Подобрать ипотеку"))
 		self.label_53.setText(_translate("MainWindow", "Сумма кредита:"))
-		self.mortgage_sumKredita.setText(_translate("MainWindow", "10000000 ₽"))
+		self.mortgage_sumKredita.setText(_translate("MainWindow", "0 ₽"))
 		self.mortgage_vznos.setPlaceholderText(_translate("MainWindow", "Первоначальный взнос в рублях"))
 		self.mortgage_banks.setText(_translate("MainWindow", "Подобрано банков: 0"))
 		self.tab_menu.setTabText(self.tab_menu.indexOf(self.mortgage), _translate("MainWindow", "Ипотека"))
@@ -455,14 +455,13 @@ class Ui_MainWindow(object):
 			# тут формла потом делаешь сет на лейбл с ценой ?
 			month = year * 12
 			r = stavka / 1200
-			monthPayment = summa * ((r * ((1 + r) ** month))/(((1+r)**month) - 1))
-			self.credit_payment.setText(str(int(monthPayment)) + " ₽")
+			if(summa > 0 and year > 0):
+				monthPayment = summa * ((r * ((1 + r) ** month))/(((1+r)**month) - 1))
+				self.credit_payment.setText(str(int(monthPayment)) + " ₽")
 
+				print(summa, year, monthPayment)
+				return print(summa, year)
 
-			print(summa, year, monthPayment)
-			return print(summa, year)
-			
-			
 		except ValueError as e:
 			pass
 	
@@ -522,10 +521,13 @@ class Ui_MainWindow(object):
 			newSumma = summa - vznos
 			self.mortgage_sumKredita.setText(f"{int(newSumma)} ₽")
 			r = stavka / 1200
-			monthPayment = newSumma * ((r * ((1 + r) ** month))/(((1+r)**month) - 1))
-			self.label_13.setText(str(int(monthPayment)) + " ₽")
-			print(summa, year,vznos)
-			return print(summa, year,vznos)
+			if(summa > 0 and year > 0):
+				monthPayment = newSumma * ((r * ((1 + r) ** month))/(((1+r)**month) - 1))
+				self.label_13.setText(str(int(monthPayment)) + " ₽")
+				print(summa, year,vznos)
+				return print(summa,year,vznos)
 			
 		except ValueError as e:
 			pass
+
+
